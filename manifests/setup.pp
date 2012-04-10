@@ -32,8 +32,14 @@ class apache::setup {
     ensure => directory,
     path   => $apache::params::log_dir,
     owner  => 'root',
-    group  => 'root',
-    mode   => '0755',
+    group  => $::operatingsystem ? {
+      /Debian|Ubuntu/ => 'adm',
+      default         => 'root',
+    },
+    mode   => $::operatingsystem ? {
+      /Debian|Ubuntu/ => '0750',
+      default         => '0755',
+    },
   }
 
 
